@@ -1,0 +1,702 @@
+{
+  "info": {
+    "_postman_id": "10e73fe6-469c-4d84-b392-82e4b0647ed2",
+    "name": "Ejercicio1 S.Q.A II",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54259897"
+  },
+  "item": [
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Crear Usuario",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const respuesta = pm.response.json();\r",
+                  "if(pm.response.code >= 200 && pm.response.code < 300)\r",
+                  "{\r",
+                  "    pm.test(\"Status Code is 201\", function()\r",
+                  "    {\r",
+                  "        pm.response.to.have.status(201);\r",
+                  "    })\r",
+                  "    pm.test(\"Response is less than 500ms\", function()\r",
+                  "    {\r",
+                  "        pm.expect(pm.response.responseTime).to.be.below(500);\r",
+                  "    })\r",
+                  "\r",
+                  "    pm.environment.set(\"User_ID\", respuesta.id); \r",
+                  "}\r",
+                  "else\r",
+                  "{\r",
+                  "    pm.test(\"It is already created\", function()\r",
+                  "    {\r",
+                  "        pm.response.to.have.status(422);\r",
+                  "    })\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const email = pm.variables.replaceIn('{{$randomEmail}}');\r",
+                  "\r",
+                  "pm.environment.set(\"email\", email);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{Token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"name\": \"{{name}}\", \"email\": \"{{email}}\", \"gender\": \"{{gender}}\", \"status\": \"{{status}}\" }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL}}/users",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "users"
+              ]
+            },
+            "description": "Generated from cURL: curl -X POST 'https://gorest.co.in/public/v2/users' \\\r\n  -H 'Accept: application/json' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{ \"name\": \"Tenali Ramakrishna\", \"email\": \"tenali@example.com\", \"gender\": \"male\", \"status\": \"active\" }'"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener Usuario",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const respuesta = pm.response.json();\r",
+                  "if(pm.response.code >= 200 && pm.response.code < 300)\r",
+                  "{\r",
+                  "    pm.test(\"Status Code is 200\", function()\r",
+                  "    {\r",
+                  "        pm.response.to.have.status(200);\r",
+                  "    })\r",
+                  "    pm.test(\"Response is less than 500ms\", function()\r",
+                  "    {\r",
+                  "        pm.expect(pm.response.responseTime).to.be.below(500);\r",
+                  "    })\r",
+                  "}\r",
+                  "else\r",
+                  "{\r",
+                  "    pm.test(\"It is not created in the system\", function()\r",
+                  "    {\r",
+                  "        pm.response.to.have.status(404);\r",
+                  "    })\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{Token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{URL}}/users/{{User_ID}}",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "users",
+                "{{User_ID}}"
+              ]
+            },
+            "description": "Generated from cURL: curl -X GET 'https://gorest.co.in/public/v2/users/1' \\\r\n  -H 'Accept: application/json'"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener Usuarios",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const respuesta = pm.response.json();\r",
+                  "if(pm.response.code >= 200 && pm.response.code < 300)\r",
+                  "{\r",
+                  "    pm.test(\"Status Code is 200\", function()\r",
+                  "    {\r",
+                  "        pm.response.to.have.status(200);\r",
+                  "    })\r",
+                  "    pm.test(\"Response is less than 500ms\", function()\r",
+                  "    {\r",
+                  "        pm.expect(pm.response.responseTime).to.be.below(500);\r",
+                  "    })\r",
+                  "}\r",
+                  "else\r",
+                  "{\r",
+                  "    pm.test(\"Something Fail\", function()\r",
+                  "    {\r",
+                  "        pm.response.to.have.status(400);\r",
+                  "    })\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{Token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/jsonhttps://gorest.co.in/public/v2/users"
+              }
+            ],
+            "url": {
+              "raw": "{{URL}}/users",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "users"
+              ]
+            },
+            "description": "Generated from cURL: curl -X GET 'https://gorest.co.in/public/v2/users' \\\r\n  -H 'Accept: application/json'https://gorest.co.in/public/v2/users"
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar Usuario",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const respuesta = pm.response.json();\r",
+                  "if(pm.response.code >= 200 && pm.response.code < 300)\r",
+                  "{\r",
+                  "    pm.test(\"Status Code is 200\", function()\r",
+                  "    {\r",
+                  "        pm.response.to.have.status(200);\r",
+                  "    })\r",
+                  "    pm.test(\"Response is less than 500ms\", function()\r",
+                  "    {\r",
+                  "        pm.expect(pm.response.responseTime).to.be.below(500);\r",
+                  "    })\r",
+                  "}\r",
+                  "else\r",
+                  "{\r",
+                  "    pm.test(\"It is not  created in the system\", function()\r",
+                  "    {\r",
+                  "        pm.response.to.have.status(404);\r",
+                  "    })\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{Token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \"name\": \"Kal 2.0\", \"status\": \"active\" }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL}}/users/{{User_ID}}",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "users",
+                "{{User_ID}}"
+              ]
+            },
+            "description": "Generated from cURL: curl -X PUT 'https://gorest.co.in/public/v2/users/1' \\\r\n  -H 'Accept: application/json' \\\r\n  -H 'Content-Type: application/json' \\\r\n  -d '{ \"name\": \"Updated Name\", \"status\": \"inactive\" }'"
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar Usuario",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if(pm.response.code >= 200 && pm.response.code < 300)\r",
+                  "{\r",
+                  "    pm.test(\"Status Code is 204\", function()\r",
+                  "    {\r",
+                  "        pm.response.to.have.status(204);\r",
+                  "    })\r",
+                  "    pm.test(\"Response is less than 500ms\", function()\r",
+                  "    {\r",
+                  "        pm.expect(pm.response.responseTime).to.be.below(500);\r",
+                  "    })\r",
+                  "}\r",
+                  "else\r",
+                  "{\r",
+                  "    pm.test(\"It is not  created in the system\", function()\r",
+                  "    {\r",
+                  "        pm.response.to.have.status(404);\r",
+                  "    })\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{Token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{URL}}/users/{{User_ID}}",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "users",
+                "{{User_ID}}"
+              ]
+            },
+            "description": "Generated from cURL: curl -X DELETE 'https://gorest.co.in/public/v2/users/1' \\\r\n  -H 'Accept: application/json'"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Post",
+      "item": [
+        {
+          "name": "Crear Post",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const respuesta = pm.response.json();\r",
+                  "if(pm.response.code >= 200 && pm.response.code < 300)\r",
+                  "{\r",
+                  "    pm.test(\"Status Code is 201\", function()\r",
+                  "    {\r",
+                  "        pm.response.to.have.status(201);\r",
+                  "    })\r",
+                  "    pm.test(\"Response is less than 500ms\", function()\r",
+                  "    {\r",
+                  "        pm.expect(pm.response.responseTime).to.be.below(500);\r",
+                  "    })\r",
+                  "}\r",
+                  "else\r",
+                  "{\r",
+                  "    pm.test(\"It is already created\", function()\r",
+                  "    {\r",
+                  "        pm.response.to.have.status(422);\r",
+                  "    })\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{Token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "title",
+                  "value": "{{title}}",
+                  "type": "text",
+                  "uuid": "130b0c2a-a59b-4c24-80e7-1761eaa79d7e"
+                },
+                {
+                  "key": "body",
+                  "value": "{{body}}",
+                  "type": "text",
+                  "uuid": "955d0195-661c-476c-b5f6-3aabcbceec09"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{URL}}/users/{{User_ID}}/posts",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "users",
+                "{{User_ID}}",
+                "posts"
+              ]
+            },
+            "description": "Generated from cURL: curl -X POST 'https://gorest.co.in/public/v2/users/8114777/posts' \\\r\n  -H 'Accept: application/json'"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener Post",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const respuesta = pm.response.json();\r",
+                  "if(pm.response.code >= 200 && pm.response.code < 300)\r",
+                  "{\r",
+                  "    pm.test(\"Status Code is 200\", function()\r",
+                  "    {\r",
+                  "        pm.response.to.have.status(200);\r",
+                  "    })\r",
+                  "    pm.test(\"Response is less than 500ms\", function()\r",
+                  "    {\r",
+                  "        pm.expect(pm.response.responseTime).to.be.below(500);\r",
+                  "    })\r",
+                  "}\r",
+                  "else\r",
+                  "{\r",
+                  "    pm.test(\"There is not post\", function()\r",
+                  "    {\r",
+                  "        pm.response.to.have.status(400);\r",
+                  "    })\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{Token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{URL}}/posts",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "posts"
+              ]
+            },
+            "description": "Generated from cURL: curl -X GET 'https://gorest.co.in/public/v2/posts' \\\r\n  -H 'Accept: application/json'"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Comment",
+      "item": [
+        {
+          "name": "crear Comentario",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const respuesta = pm.response.json();\r",
+                  "if(pm.response.code >= 200 && pm.response.code < 300)\r",
+                  "{\r",
+                  "    pm.test(\"Status Code is 201\", function()\r",
+                  "    {\r",
+                  "        pm.response.to.have.status(201);\r",
+                  "    })\r",
+                  "    pm.test(\"Response is less than 500ms\", function()\r",
+                  "    {\r",
+                  "        pm.expect(pm.response.responseTime).to.be.below(500);\r",
+                  "    })\r",
+                  "}\r",
+                  "else\r",
+                  "{\r",
+                  "    pm.test(\"It is already created\", function()\r",
+                  "    {\r",
+                  "        pm.response.to.have.status(422);\r",
+                  "    })\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const email = pm.variables.replaceIn('{{$randomEmail}}');\r",
+                  "\r",
+                  "pm.environment.set(\"email2\", email);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{Token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "{{name2}}",
+                  "type": "text",
+                  "uuid": "47929892-f5dd-48fb-9003-fd6f523702f5"
+                },
+                {
+                  "key": "email",
+                  "value": "{{email2}}",
+                  "type": "text",
+                  "uuid": "8c482661-f453-46dc-872e-0d61e6364ac1"
+                },
+                {
+                  "key": "body",
+                  "value": "{{body2}}",
+                  "type": "text",
+                  "uuid": "465e7ec5-d78f-45f4-a374-0bb3cddd1e0d"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{URL}}/posts/{{Post_ID}}/comments",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "posts",
+                "{{Post_ID}}",
+                "comments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener Comments",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const respuesta = pm.response.json();\r",
+                  "if(pm.response.code >= 200 && pm.response.code < 300)\r",
+                  "{\r",
+                  "    pm.test(\"Status Code is 200\", function()\r",
+                  "    {\r",
+                  "        pm.response.to.have.status(200);\r",
+                  "    })\r",
+                  "    pm.test(\"Response is less than 500ms\", function()\r",
+                  "    {\r",
+                  "        pm.expect(pm.response.responseTime).to.be.below(500);\r",
+                  "    })\r",
+                  "}\r",
+                  "else\r",
+                  "{\r",
+                  "    pm.test(\"It is not created in the system\", function()\r",
+                  "    {\r",
+                  "        pm.response.to.have.status(404);\r",
+                  "    })\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{Token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{URL}}/posts/{{Post_ID}}/comments",
+              "host": [
+                "{{URL}}"
+              ],
+              "path": [
+                "posts",
+                "{{Post_ID}}",
+                "comments"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "email",
+      "value": ""
+    }
+  ]
+}
